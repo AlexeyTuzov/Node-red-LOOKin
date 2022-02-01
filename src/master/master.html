@@ -1,16 +1,24 @@
 <script type="text/javascript">
     RED.nodes.registerType("master", {
-        category: "function",
+        category: "LOOKin",
         icon: "icon.svg",
-        color: "FFFFFF",
-        inputs: 0,
-        outputs: 0
+        color: "#FF0000",
+        inputs: 1,
+        outputs: 1,
+        defaults: {
+            name: {
+                value: ""
+            }
+        },
+        label: function () {
+            return this.name ? this.name : 'master';
+        }
     });
 </script>
 
 <script type="text/html" data-template-name="master">
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i></label>
+        <label for="node-input-name"><i class="fa fa-tag"></i>Name</label>
         <input id="node-input-name" type="text" placeholder="Name">
     </div>
 </script>
