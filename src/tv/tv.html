@@ -1,5 +1,5 @@
 <script type='text/javascript'>
-    RED.nodes.registerType('master', {
+    RED.nodes.registerType('tv', {
         category: 'LOOKin',
         icon: 'icon.svg',
         color: '#FF0000',
@@ -11,19 +11,18 @@
             }
         },
         label: function () {
-            return this.name ? this.name : 'master';
+            return this.name ? this.name : 'tv';
         }
     });
 </script>
 
-<script type='text/html' data-template-name='master'>
+<script type='text/html' data-template-name='tv'>
     <div class='form-row'>
         <label for='node-input-name'><i class='fa fa-tag'></i>Name</label>
         <input id='node-input-name' type='text' placeholder='Name'>
-    </div>
+    </div> 
 </script>
 
-<script type='text/html' data-help-name='master'>
+<script type='text/html' data-help-name='tv'>
     <p>Here will be some tips</p>
 </script>
-

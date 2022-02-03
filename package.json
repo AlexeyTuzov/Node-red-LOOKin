@@ -17,7 +17,8 @@
   },
   "node-red": {
     "nodes": {
-      "master": "dist/master/master.js"
+      "master": "dist/master/master.js",
+      "tv": "dist/tv/tv.js"
     }
   },
   "license": "MIT",
