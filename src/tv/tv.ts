@@ -8,7 +8,7 @@ export = function (RED: nodeRed.NodeAPI): void {
         this.on('close', function () {
         });
         this.on('input', function (msg, send, done) {
-            let message: nodeRed.NodeMessage = {payload: context.get('remoteInfo')};
+            let message: nodeRed.NodeMessage = {payload: context.get('remoteInfo') || ''};
             send(message);
             done();
         });
