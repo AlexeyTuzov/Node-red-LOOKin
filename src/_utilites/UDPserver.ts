@@ -24,7 +24,6 @@ const udpServer = async (): Promise<Device> => {
         });
 
         socket.on('message', async (msg, rinfo) => {
-
             if (msg.toString().match(ALIVE)) {
                 let alivePayload = msg.toString().replace(ALIVE, '');
                 resolve(await getAllDataFromRemote(alivePayload));

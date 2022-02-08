@@ -10,6 +10,10 @@ export = function (RED: nodeRed.NodeAPI): void {
 
         this.name = config.name;
 
+        let info = UDPserver().then( () => {
+            context.set('remoteInfo', {data: 'received'})
+        }).catch( (err) => {console.log(err.stack)});
+
         this.on('close', function () {
         });
         this.on('input', function (msg, send, done) {
