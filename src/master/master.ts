@@ -1,5 +1,5 @@
 import * as nodeRed from 'node-red';
-import UDPserver from '../_utilites/UDPserver';
+import UDPserver, {socket} from '../_utilites/UDPserver';
 import {Device} from "../_utilites/interfaces";
 
 export = function (RED: nodeRed.NodeAPI): void {
@@ -9,10 +9,16 @@ export = function (RED: nodeRed.NodeAPI): void {
         let context = this.context().global;
 
         this.name = config.name;
+        this.status({fill: "red", shape: "dot", text: 'disconnected'});
 
-        let info = UDPserver().then( () => {
-            context.set('remoteInfo', {data: 'received'})
-        }).catch( (err) => {console.log(err.stack)});
+        let info: Device;
+        UDPserver().then((value) => {
+            info = value;
+            this.status({fill: "green", shape: "dot", text: 'connected'});
+            context.set('remoteInfo', info);
+        }).catch((err) => {
+            console.log(err.stack)
+        });
 
         this.on('close', function () {
         });
