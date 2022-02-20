@@ -11,11 +11,9 @@ export = function (RED: nodeRed.NodeAPI): void {
         this.name = config.name;
         this.status({fill: "red", shape: "dot", text: 'disconnected'});
 
-        let info: Device;
-        UDPserver().then((value) => {
-            info = value;
+        UDPserver().then((value: Device) => {
             this.status({fill: "green", shape: "dot", text: 'connected'});
-            context.set('remoteInfo', info);
+            context.set('deviceInfo', value);
         }).catch((err) => {
             console.log(err.stack)
         });
