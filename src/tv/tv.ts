@@ -1,14 +1,9 @@
 import * as nodeRed from 'node-red';
 import {Device, RemoteController} from '../_utilites/interfaces';
-import appendOptionToSelector from '../_utilites/appendOptionToSelector';
-//import {TVemitter} from './appendTV';
-
-interface deviceInfo {
-    deviceInfo?: Device
-}
+import {INode, IConfig} from '../_utilites/NodeRedUtilites/nodeInterfaces';
 
 export = function (RED: nodeRed.NodeAPI): void {
-    RED.nodes.registerType('tv', function (this: nodeRed.Node, config: nodeRed.NodeDef) {
+    RED.nodes.registerType('tv', function (this: INode, config: IConfig) {
         RED.nodes.createNode(this, config);
         let context = this.context().global;
         /*
@@ -22,11 +17,14 @@ export = function (RED: nodeRed.NodeAPI): void {
          */
 
         this.name = config.name;
+        this.UUID = config.UUID;
         this.on('close', function () {
         });
         this.on('input', function (msg, send, done) {
             let message: nodeRed.NodeMessage = {payload: context.get('deviceInfo') || ''};
             send(message);
+            let params: nodeRed.NodeMessage = {payload: `Name: ${this.name} UUID: ${this.UUID}`};
+            send(params);
             done();
         });
     });
