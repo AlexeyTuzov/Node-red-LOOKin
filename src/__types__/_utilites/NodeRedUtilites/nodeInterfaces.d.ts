@@ -1,6 +1,5 @@
 import * as nodeRed from 'node-red';
 import { RemoteController } from '../interfaces';
-
 export interface IConfig extends nodeRed.NodeDef {
     UUID: string;
 }
@@ -11,4 +10,3 @@ export interface INode extends nodeRed.Node {
     IP: string;
     ID: string;
 }
-
