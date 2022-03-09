@@ -1,5 +1,6 @@
 import { INode } from "./nodeInterfaces";
 import getPowerStatus from "./getPowerStatus";
+import logger from './logger';
 
 const setActualPowerStatus = async (node: INode): Promise<void> => {
 
@@ -9,12 +10,11 @@ const setActualPowerStatus = async (node: INode): Promise<void> => {
             if(node.isPowerOn) {
                 node.status({fill: 'green', shape: 'dot', text: 'On'});
             } else {
-                node.status({fill: 'grey', shape: 'ring', text: 'Off'});
+                node.status({fill: 'red', shape: 'ring', text: 'Off'});
             }
         });
     } catch (err: any) {
-        console.log(err.stack);
-        node.error(`Cannot actualize power status: ${err.message}`);
+        logger(node,`Cannot actualize power status: ${err.message}`);
     }
 
 }

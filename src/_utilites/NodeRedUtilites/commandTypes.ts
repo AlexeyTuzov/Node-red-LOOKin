@@ -1,11 +1,13 @@
 enum commandTypes {
-    pow = 'pow',
-    pow_on = 'pow_on',
-    pow_off = 'pow_off',
+    power = 'power',
     mode = 'mode',
     mute = 'mute',
-    vol_up = 'vol_up',
-    vol_down = 'vol_down'
+    menu = 'menu',
+    volup = 'volup',
+    voldown = 'voldown',
+    cursor = 'cursor',
+    chup = 'chup',
+    chdown = 'chdown'
 
 }
 

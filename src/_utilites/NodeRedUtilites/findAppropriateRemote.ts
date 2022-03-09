@@ -1,6 +1,7 @@
 import {INode} from './nodeInterfaces';
 import {Device, RemoteController} from '../interfaces';
 import setActualPowerStatus from './setActualPowerStatus';
+import logger from './logger';
 
 const findAppropriateRemote = async (node: INode, device: Device, type: string): Promise<void> => {
 
@@ -9,9 +10,11 @@ const findAppropriateRemote = async (node: INode, device: Device, type: string):
     );
     if (node.RC) {
         setActualPowerStatus(node);
+        node.isAvailable = true;
     } else {
-        console.log('No Remote Controller matches the specified UUID!');
-        node.error('No Remote Controller matches the specified UUID!');
+        logger(node,'No Remote Controller matches the specified UUID!');
+        node.isAvailable = false;
+        node.status({fill: 'grey', text:'Not Available', shape: 'ring'});
     }
 }
 
