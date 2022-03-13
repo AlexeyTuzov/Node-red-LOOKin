@@ -5,7 +5,7 @@ import logger from './logger';
 const setActualPowerStatus = async (node: INode): Promise<void> => {
 
     try {
-        getPowerStatus(node.IP, node.UUID).then(value => {
+         getPowerStatus(node.IP, node.UUID).then(value => {
             node.isPowerOn = value;
             if(node.isPowerOn) {
                 node.status({fill: 'green', shape: 'dot', text: 'On'});
@@ -14,7 +14,7 @@ const setActualPowerStatus = async (node: INode): Promise<void> => {
             }
         });
     } catch (err: any) {
-        logger(node,`Cannot actualize power status: ${err.message}`);
+        logger(node,`Failed to actualize power status of ${node.UUID}: ${err.message}`);
     }
 
 }

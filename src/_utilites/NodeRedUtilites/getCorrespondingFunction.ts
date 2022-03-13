@@ -2,7 +2,6 @@ import functionTypes from './functionTypes';
 
 const getCorrespondingFunction = (command: string): string => {
 
-    console.log(`getCorrespondingFunction(${command})`);
     if (command === 'speed_up' ||
         command === 'speed_down') return 'speed';
     if (command === 'mode_1' ||
@@ -18,9 +17,7 @@ const getCorrespondingFunction = (command: string): string => {
         command === 'select') return 'cursor';
 
     const possibleCommands: string[] = Object.keys(functionTypes);
-    console.log(`possible commands: ${possibleCommands}`);
     if (possibleCommands.find(item => item === command)) {
-        console.log(`filtered possible command: ${functionTypes[command]}`);
         return functionTypes[command];
     } else {
         return '';
