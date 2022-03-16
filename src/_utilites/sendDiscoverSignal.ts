@@ -1,6 +1,6 @@
-import {socket} from './UDPserver';
+import dgram from 'dgram';
 
-const sendDiscoverSignal = (msg: string, port: number, ip: string) => {
+const sendDiscoverSignal = (socket: dgram.Socket ,msg: string, port: number, ip: string) => {
     socket.setBroadcast(true);
     socket.send(Buffer.from(msg), port, ip, err => {
         if (err) {
@@ -12,4 +12,4 @@ const sendDiscoverSignal = (msg: string, port: number, ip: string) => {
     })
 }
 
-export default  sendDiscoverSignal;
+export default sendDiscoverSignal;

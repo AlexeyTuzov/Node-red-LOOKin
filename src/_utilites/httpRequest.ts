@@ -1,11 +1,12 @@
 import * as http from 'http';
+import {ClientRequest} from 'http';
 
 const httpRequest = async (IP: string, path: string): Promise<string> => {
 
     return new Promise( (resolve, reject) => {
 
-        try {
-            http.get({host: IP, path: path}, res => {
+            const req: ClientRequest = http.get({host: IP, path: path}, res => {
+
                 let data: string = '';
                 res.on('data', chunk => {
                     data += chunk;
@@ -17,9 +18,9 @@ const httpRequest = async (IP: string, path: string): Promise<string> => {
                     reject(console.log(err.stack));
                 });
             });
-        } catch (err: any) {
-            console.log(err.stack);
-        }
+            req.on('error', (err:any) => {
+                reject(new Error(err.message));
+            });
     });
 }
 

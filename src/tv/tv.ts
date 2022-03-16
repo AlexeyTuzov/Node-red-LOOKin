@@ -25,10 +25,11 @@ export = function (RED: nodeRed.NodeAPI): void {
             findAppropriateRemote(this, device, remotesTypes.TV);
         } else {
             this.isAvailable = false;
-            this.status({fill: 'grey', text:'Not Available', shape: 'ring'});
+            this.status({fill: 'grey', text: 'Not Available', shape: 'ring'});
         }
 
         this.on('close', function () {
+
         });
         this.on('input', async function (msg, send, done) {
             let command: string = msg.payload.toString() || '';
