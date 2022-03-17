@@ -19,6 +19,9 @@ export = function (RED: nodeRed.NodeAPI): void {
         let device: Device | any = context.get('deviceInfo');
         this.name = config.name;
         this.UUID = config.UUID;
+        //--------------------------------------------------
+        // create standalone function 'initialize NODE'
+        // add event listener imported from master NODE
         if (device) {
             this.IP = device.IP;
             this.ID = device.ID;
@@ -27,7 +30,7 @@ export = function (RED: nodeRed.NodeAPI): void {
             this.isAvailable = false;
             this.status({fill: 'grey', text: 'Not Available', shape: 'ring'});
         }
-
+        //---------------------------------------------------
         this.on('close', function () {
 
         });

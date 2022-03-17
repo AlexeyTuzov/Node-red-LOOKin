@@ -10,15 +10,14 @@ export = function (RED: nodeRed.NodeAPI): void {
 
         this.name = config.name;
 
-        const savedInfo: any = context.get('deviceInfo');
-        this.log(`deviceInfo: ${savedInfo}`);
+        const savedInfo: Device | any = context.get('deviceInfo');
         if (savedInfo) {
             this.status({fill: 'green', shape: 'dot', text: 'connected'});
         } else {
             UDPserver().then((value: Device) => {
                 this.status({fill: 'green', shape: 'dot', text: 'connected'});
                 context.set('deviceInfo', value);
-                this.log(context.get('deviceInfo'));
+                //emit initializing function for nodes
             }).catch((err) => {
                 this.log(err.stack);
             });
