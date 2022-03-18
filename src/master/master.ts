@@ -1,6 +1,8 @@
 import * as nodeRed from 'node-red';
 import UDPserver from '../_utilites/UDPserver';
 import {Device} from '../_utilites/interfaces';
+import masterEmitter from '../_utilites/NodeRedUtilites/masterEventEmitter';
+
 
 export = function (RED: nodeRed.NodeAPI): void {
     RED.nodes.registerType('master', function (this: nodeRed.Node, config: nodeRed.NodeDef) {
@@ -13,11 +15,12 @@ export = function (RED: nodeRed.NodeAPI): void {
         const savedInfo: Device | any = context.get('deviceInfo');
         if (savedInfo) {
             this.status({fill: 'green', shape: 'dot', text: 'connected'});
+            masterEmitter.emit('initialized');
         } else {
             UDPserver().then((value: Device) => {
                 this.status({fill: 'green', shape: 'dot', text: 'connected'});
                 context.set('deviceInfo', value);
-                //emit initializing function for nodes
+                masterEmitter.emit('initialized');
             }).catch((err) => {
                 this.log(err.stack);
             });

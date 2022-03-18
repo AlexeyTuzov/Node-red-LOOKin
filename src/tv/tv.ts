@@ -1,12 +1,12 @@
 import * as nodeRed from 'node-red';
 import {Device} from '../_utilites/interfaces';
-import remotesTypes from '../_utilites/remotesTypes';
 import {INode, IConfig} from '../_utilites/NodeRedUtilites/nodeInterfaces';
-import findAppropriateRemote from '../_utilites/NodeRedUtilites/findAppropriateRemote';
+import initializeNode from '../_utilites/NodeRedUtilites/initializeNode';
 import isFunctionExist from '../_utilites/NodeRedUtilites/isFunctionExist';
 import getCorrespondingFunction from '../_utilites/NodeRedUtilites/getCorrespondingFunction';
 import sendRequest from '../_utilites/NodeRedUtilites/sendRequest';
 import {emitter} from '../_utilites/UDPserver';
+import masterEmitter from '../_utilites/NodeRedUtilites/masterEventEmitter';
 import setActualPowerStatus from '../_utilites/NodeRedUtilites/setActualPowerStatus';
 import setActualFunctions from '../_utilites/NodeRedUtilites/setActualFunctions';
 import logger from '../_utilites/NodeRedUtilites/logger';
@@ -16,21 +16,14 @@ export = function (RED: nodeRed.NodeAPI): void {
         RED.nodes.createNode(this, config);
 
         let context = this.context().global;
-        let device: Device | any = context.get('deviceInfo');
+
         this.name = config.name;
         this.UUID = config.UUID;
-        //--------------------------------------------------
-        // create standalone function 'initialize NODE'
-        // add event listener imported from master NODE
-        if (device) {
-            this.IP = device.IP;
-            this.ID = device.ID;
-            findAppropriateRemote(this, device, remotesTypes.TV);
-        } else {
-            this.isAvailable = false;
-            this.status({fill: 'grey', text: 'Not Available', shape: 'ring'});
-        }
-        //---------------------------------------------------
+
+        masterEmitter.on('initialized', async () => {
+            let device: Device | any = context.get('deviceInfo');
+            await initializeNode(this, device);
+        });
         this.on('close', function () {
 
         });
