@@ -17,8 +17,10 @@
   },
   "node-red": {
     "nodes": {
-      "master": "dist/master/master.js",
-      "node": "dist/node/node.js"
+      "Master": "dist/master/master.js",
+      "Node": "dist/node/node.js",
+      "Meteo Sensors": "dist/meteo_sensors/meteo.js",
+      "Air Conditioner": "dist/AC node/AC_node.js"
     }
   },
   "license": "MIT",

@@ -5,7 +5,7 @@ import masterEmitter from '../_utilites/NodeRedUtilites/common node/masterEventE
 
 
 export = function (RED: nodeRed.NodeAPI): void {
-    RED.nodes.registerType('master', function (this: nodeRed.Node, config: nodeRed.NodeDef) {
+    RED.nodes.registerType('Master', function (this: nodeRed.Node, config: nodeRed.NodeDef) {
         RED.nodes.createNode(this, config);
 
         let context = this.context().global;
@@ -26,10 +26,10 @@ export = function (RED: nodeRed.NodeAPI): void {
             });
         }
 
-        this.on('close', function () {
+        this.on('close', () => {
             this.status({fill: 'red', shape: 'dot', text: 'disconnected'});
         });
-        this.on('input', function (msg, send, done) {
+        this.on('input', (msg, send, done) => {
             let message: nodeRed.NodeMessage = {payload: this.name}
             send(message);
             done();
