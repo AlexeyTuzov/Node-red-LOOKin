@@ -1,4 +1,4 @@
-<script type='text/javascrip'>
+<script type='text/javascript'>
     RED.nodes.registerType('meteo', {
         category: 'LOOKin',
         icon: 'icon.svg',
@@ -8,14 +8,12 @@
         defaults: {
             name: {
                 value: ''
-            },
-            UUID: {
-                value: ''
             }
         },
         label: function () {
             return this.name ? this.name : 'meteo_sensors';
-        }
+        },
+        outputLabels: ['Temperature', 'Humidity']
     })
 </script>
 
