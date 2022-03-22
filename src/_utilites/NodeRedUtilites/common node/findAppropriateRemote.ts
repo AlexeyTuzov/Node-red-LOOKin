@@ -1,5 +1,5 @@
 import {INode} from './nodeInterfaces';
-import {Device, RemoteController} from '../interfaces';
+import {Device, RemoteController} from '../../interfaces';
 import setActualPowerStatus from './setActualPowerStatus';
 import logger from './logger';
 

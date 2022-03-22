@@ -1,7 +1,7 @@
 import logger from './logger';
 import {INode} from './nodeInterfaces';
-import httpRequest from '../httpRequest';
-import {RCInfo} from '../interfaces';
+import httpRequest from '../../httpRequest';
+import {RCInfo} from '../../interfaces';
 
 const setActualFunctions = async (node: INode): Promise<void> => {
     try {

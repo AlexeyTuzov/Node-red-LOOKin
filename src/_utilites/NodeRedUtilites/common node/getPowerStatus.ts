@@ -1,5 +1,5 @@
-import httpRequest from "../httpRequest";
-import { RCInfo } from '../interfaces';
+import httpRequest from "../../httpRequest";
+import { RCInfo } from '../../interfaces';
 
 const getPowerStatus = async (IP: string, UUID: string): Promise<boolean> => {
 

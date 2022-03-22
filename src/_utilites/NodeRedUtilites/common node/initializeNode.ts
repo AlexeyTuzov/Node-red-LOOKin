@@ -1,7 +1,7 @@
 import {INode} from './nodeInterfaces';
-import {Device} from '../interfaces';
+import {Device} from '../../interfaces';
 import findAppropriateRemote from './findAppropriateRemote';
-import remotesTypes from '../remotesTypes';
+import remotesTypes from '../../remotesTypes';
 
 const initializeNode = async (node: INode, device: Device): Promise<void> => {
     if (device) {

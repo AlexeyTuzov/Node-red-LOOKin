@@ -1,18 +1,18 @@
 import * as nodeRed from 'node-red';
 import {Device} from '../_utilites/interfaces';
-import {INode, IConfig} from '../_utilites/NodeRedUtilites/nodeInterfaces';
-import initializeNode from '../_utilites/NodeRedUtilites/initializeNode';
-import isFunctionExist from '../_utilites/NodeRedUtilites/isFunctionExist';
-import getCorrespondingFunction from '../_utilites/NodeRedUtilites/getCorrespondingFunction';
-import sendRequest from '../_utilites/NodeRedUtilites/sendRequest';
+import {INode, IConfig} from '../_utilites/NodeRedUtilites/common node/nodeInterfaces';
+import initializeNode from '../_utilites/NodeRedUtilites/common node/initializeNode';
+import isFunctionExist from '../_utilites/NodeRedUtilites/common node/isFunctionExist';
+import getCorrespondingFunction from '../_utilites/NodeRedUtilites/common node/getCorrespondingFunction';
+import sendRequest from '../_utilites/NodeRedUtilites/common node/sendRequest';
 import {emitter} from '../_utilites/UDPserver';
-import masterEmitter from '../_utilites/NodeRedUtilites/masterEventEmitter';
-import setActualPowerStatus from '../_utilites/NodeRedUtilites/setActualPowerStatus';
-import setActualFunctions from '../_utilites/NodeRedUtilites/setActualFunctions';
-import logger from '../_utilites/NodeRedUtilites/logger';
+import masterEmitter from '../_utilites/NodeRedUtilites/common node/masterEventEmitter';
+import setActualPowerStatus from '../_utilites/NodeRedUtilites/common node/setActualPowerStatus';
+import setActualFunctions from '../_utilites/NodeRedUtilites/common node/setActualFunctions';
+import logger from '../_utilites/NodeRedUtilites/common node/logger';
 
 export = function (RED: nodeRed.NodeAPI): void {
-    RED.nodes.registerType('tv', function (this: INode, config: IConfig) {
+    RED.nodes.registerType('node', function (this: INode, config: IConfig) {
         RED.nodes.createNode(this, config);
 
         let context = this.context().global;

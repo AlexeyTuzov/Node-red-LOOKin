@@ -1,6 +1,6 @@
 import {INode} from './nodeInterfaces';
 import commandCodes from './commandCodes';
-import httpRequest from '../httpRequest';
+import httpRequest from '../../httpRequest';
 import logger from './logger';
 
 const sendRequest = async (node: INode, command: string): Promise<void> => {

@@ -1,7 +1,7 @@
 import * as nodeRed from 'node-red';
 import UDPserver from '../_utilites/UDPserver';
 import {Device} from '../_utilites/interfaces';
-import masterEmitter from '../_utilites/NodeRedUtilites/masterEventEmitter';
+import masterEmitter from '../_utilites/NodeRedUtilites/common node/masterEventEmitter';
 
 
 export = function (RED: nodeRed.NodeAPI): void {
