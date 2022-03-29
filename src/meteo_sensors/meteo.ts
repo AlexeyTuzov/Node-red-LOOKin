@@ -18,8 +18,10 @@ export = function (RED: nodeRed.NodeAPI) {
             await initializeMeteo(this, device);
         });
 
-        const METEO_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:FE:00:\w{8}`;
         emitter.on('updated_meteo', (msg: string) => {
+
+            const METEO_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:FE:00:\w{8}`;
+
             if (msg.match(RegExp(METEO_UPDATE_EXPRESSION))) {
                 let measuredTemp: number = parseInt(msg.slice(-8, -4), 16) / 10;
                 let measuredHumidity: number = parseInt(msg.slice(-4), 16) / 10;
