@@ -11,3 +11,10 @@ export interface INode extends nodeRed.Node {
     IP: string;
     ID: string;
 }
+export interface ACNode extends INode {
+    ACmode: string;
+    tempShift: string;
+    fanMode: string;
+    shuttersMode: string;
+    codeset: string;
+}

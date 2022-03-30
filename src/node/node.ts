@@ -24,7 +24,7 @@ export = function (RED: nodeRed.NodeAPI): void {
             let device: Device | any = context.get('deviceInfo');
             await initializeNode(this, device);
         });
-        
+
         this.on('input', async (msg, send, done) => {
             let command: string = msg.payload.toString() || '';
             let func: string = getCorrespondingFunction(command);
@@ -37,15 +37,19 @@ export = function (RED: nodeRed.NodeAPI): void {
             }
         });
 
-        const DATA_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:data:${this.UUID}$`;
         emitter.on('updated_data', async (msg: string) => {
+
+            const DATA_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:data:${this.UUID}$`;
+
             if (msg.match(RegExp(DATA_UPDATE_EXPRESSION))) {
                 await setActualFunctions(this);
             }
         });
 
-        const STATUS_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:87:FE:${this.UUID}`;
         emitter.on('updated_status', async (msg: string) => {
+
+            const STATUS_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:87:FE:${this.UUID}`;
+
             if (msg.match(RegExp(STATUS_UPDATE_EXPRESSION))) {
                 await setActualPowerStatus(this);
             }
