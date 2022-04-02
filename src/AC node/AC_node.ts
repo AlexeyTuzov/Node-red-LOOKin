@@ -6,6 +6,8 @@ import initializeAC from '../_utilites/NodeRedUtilites/AC node/initializeAC';
 import { emitter } from '../_utilites/UDPserver';
 import setActualCodeset from '../_utilites/NodeRedUtilites/AC node/setActualCodeset';
 import setActualACStatus from '../_utilites/NodeRedUtilites/AC node/setActualACStatus';
+import applyStateChange from '../_utilites/NodeRedUtilites/AC node/applyStateChange';
+import sendACRequest from '../_utilites/NodeRedUtilites/AC node/sendACRequest';
 
 export = function (RED: nodeRed.NodeAPI) {
     RED.nodes.registerType('Air Conditioner', function (this: ACNode, config: IConfig) {
@@ -24,7 +26,11 @@ export = function (RED: nodeRed.NodeAPI) {
         });
 
         this.on('input', async (msg, send, done) => {
-            let command: string = msg.payload.toString() || '';
+            let stateChange: string = msg.payload.toString() || '';
+            applyStateChange(this, stateChange);
+            let command: string = `${this.codeset}${this.ACmode}${this.tempShift}`;
+            await sendACRequest(this, command);
+            done();
         });
 
 
