@@ -18,7 +18,7 @@ export = function (RED: nodeRed.NodeAPI) {
         this.name = config.name;
         this.UUID = config.UUID;
 
-        masterEmitter.on('initialized', async () => {
+        masterEmitter.on('initialized',  async () => {
             let device: Device | any = context.get('deviceInfo');
             await initializeAC(this, device);
             console.log('AC status:', this.ACmode, this.tempShift, this.fanMode, this.shuttersMode);
@@ -28,9 +28,13 @@ export = function (RED: nodeRed.NodeAPI) {
         this.on('input', async (msg, send, done) => {
             let stateChange: string = msg.payload.toString() || '';
             applyStateChange(this, stateChange);
-            let command: string = `${this.codeset}${this.ACmode}${this.tempShift}`;
+            let command: string = `/commands/ir/ac/${this.codeset}${this.ACmode}${this.tempShift}${this.fanMode}${this.shuttersMode}`;
             await sendACRequest(this, command);
             done();
+        });
+
+        this.on('close', () => {
+
         });
 
 

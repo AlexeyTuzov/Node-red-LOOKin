@@ -4,13 +4,14 @@ import getACCodeset from './getACCodeset';
 
 const setActualCodeset = async (node: ACNode): Promise<void> => {
 
-    try {
-        getACCodeset(node.IP, node.UUID).then(value => {
-            node.codeset = value;
+    await getACCodeset(node.IP, node.UUID)
+        .then(value => {
+            node.codeset = value || '';
+            console.log('setActualCodeset: node.codeset:', node.codeset);
+        })
+        .catch((err: any) => {
+            logger(node, `Failed to update air conditioner ${node.UUID} code set! ${err.message}`);
         });
-    } catch (err: any) {
-        logger(node, `Failed to actualize AC codeset of ${node.UUID}: ${err.message}`);
-    }
 }
 
 export default setActualCodeset;
