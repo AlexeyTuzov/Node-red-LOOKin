@@ -1,9 +1,9 @@
 import * as nodeRed from 'node-red';
-import { INode, IConfig } from '../_utilites/NodeRedUtilites/common node/nodeInterfaces';
+import {INode, IConfig} from '../_utilites/NodeRedUtilites/common node/nodeInterfaces';
 import masterEmitter from '../_utilites/NodeRedUtilites/common node/masterEventEmitter';
-import { Device } from '../_utilites/interfaces';
+import {Device} from '../_utilites/interfaces';
 import initializeMeteo from '../_utilites/NodeRedUtilites/meteo/initializeMeteo';
-import { emitter } from '../_utilites/UDPserver';
+import {emitter} from '../_utilites/UDPserver';
 
 export = function (RED: nodeRed.NodeAPI) {
     RED.nodes.registerType('Meteo Sensors', function (this: INode, config: IConfig) {
@@ -13,9 +13,15 @@ export = function (RED: nodeRed.NodeAPI) {
 
         this.name = config.name;
 
-        masterEmitter.on('initialized', async () => {
+        const onInit = async () => {
             let device: Device | any = context.get('deviceInfo');
             await initializeMeteo(this, device);
+        }
+
+        masterEmitter.once('initialized', onInit);
+
+        this.on('close', () => {
+            //masterEmitter.removeListener('initialized', onInit);
         });
 
         emitter.on('updated_meteo', (msg: string) => {
@@ -25,8 +31,8 @@ export = function (RED: nodeRed.NodeAPI) {
             if (msg.match(RegExp(METEO_UPDATE_EXPRESSION))) {
                 let measuredTemp: number = parseInt(msg.slice(-8, -4), 16) / 10;
                 let measuredHumidity: number = parseInt(msg.slice(-4), 16) / 10;
-                let msgTemp: nodeRed.NodeMessage = { payload: `Temperature: ${measuredTemp} \u00B0C` };
-                let msgHumidity: nodeRed.NodeMessage = { payload: `Humidity: ${measuredHumidity} %` };
+                let msgTemp: nodeRed.NodeMessage = {payload: `Temperature: ${measuredTemp} \u00B0C`};
+                let msgHumidity: nodeRed.NodeMessage = {payload: `Humidity: ${measuredHumidity} %`};
                 this.send([msgTemp, msgHumidity]);
             }
         });

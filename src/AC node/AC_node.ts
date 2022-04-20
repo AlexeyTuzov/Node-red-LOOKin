@@ -18,12 +18,14 @@ export = function (RED: nodeRed.NodeAPI) {
         this.name = config.name;
         this.UUID = config.UUID;
 
-        masterEmitter.on('initialized',  async () => {
+        const onInit = async () => {
             let device: Device | any = context.get('deviceInfo');
             await initializeAC(this, device);
             console.log('AC status:', this.ACmode, this.tempShift, this.fanMode, this.shuttersMode);
             console.log('AC codeset:', this.codeset);
-        });
+        }
+
+        masterEmitter.once('initialized', onInit);
 
         this.on('input', async (msg, send, done) => {
             let stateChange: string = msg.payload.toString() || '';
@@ -34,9 +36,8 @@ export = function (RED: nodeRed.NodeAPI) {
         });
 
         this.on('close', () => {
-
+            //masterEmitter.removeListener('initialized', onInit);
         });
-
 
         emitter.on('updated_data', async (msg: string) => {
 

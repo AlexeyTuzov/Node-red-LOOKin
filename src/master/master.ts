@@ -1,5 +1,5 @@
 import * as nodeRed from 'node-red';
-import UDPserver, {emitter} from '../_utilites/UDPserver';
+import UDPserver from '../_utilites/UDPserver';
 import {Device} from '../_utilites/interfaces';
 import masterEmitter from '../_utilites/NodeRedUtilites/common node/masterEventEmitter';
 
@@ -34,13 +34,7 @@ export = function (RED: nodeRed.NodeAPI): void {
 
         this.on('close', (done) => {
             this.status({fill: 'red', shape: 'dot', text: 'disconnected'});
-            //masterEmitter.removeAllListeners();
-            //emitter.removeAllListeners();
-            done();
-        });
-        this.on('input', (msg, send, done) => {
-            let message: nodeRed.NodeMessage = {payload: this.name}
-            send(message);
+            console.log('close event fired! fot master node');
             done();
         });
     });

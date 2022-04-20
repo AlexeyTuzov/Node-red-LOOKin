@@ -20,10 +20,12 @@ export = function (RED: nodeRed.NodeAPI): void {
         this.name = config.name;
         this.UUID = config.UUID;
 
-        masterEmitter.on('initialized', async () => {
+        const onInit = async () => {
             let device: Device | any = context.get('deviceInfo');
             await initializeNode(this, device);
-        });
+        }
+
+        masterEmitter.once('initialized', onInit);
 
         this.on('input', async (msg, send, done) => {
             let command: string = msg.payload.toString() || '';
@@ -32,9 +34,14 @@ export = function (RED: nodeRed.NodeAPI): void {
                 logger(this, `No function for command '${command}' found for ${this.UUID}`);
             }
             if (this.isAvailable && !!func && isFunctionExist(this, func)) {
+                console.log('command to be sent:', command);
                 await sendRequest(this, command);
                 done();
             }
+        });
+
+        this.on('close', () => {
+            //masterEmitter.removeListener('initialized', onInit);
         });
 
         emitter.on('updated_data', async (msg: string) => {
