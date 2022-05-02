@@ -5,27 +5,47 @@ import initializeNode from '../_utilites/NodeRedUtilites/common node/initializeN
 import isFunctionExist from '../_utilites/NodeRedUtilites/common node/isFunctionExist';
 import getCorrespondingFunction from '../_utilites/NodeRedUtilites/common node/getCorrespondingFunction';
 import sendRequest from '../_utilites/NodeRedUtilites/common node/sendRequest';
-import {emitter} from '../_utilites/UDPserver';
-import masterEmitter from '../_utilites/NodeRedUtilites/common node/masterEventEmitter';
 import setActualPowerStatus from '../_utilites/NodeRedUtilites/common node/setActualPowerStatus';
 import setActualFunctions from '../_utilites/NodeRedUtilites/common node/setActualFunctions';
 import logger from '../_utilites/NodeRedUtilites/common node/logger';
+import EventEmitter from 'events';
 
 export = function (RED: nodeRed.NodeAPI): void {
     RED.nodes.registerType('Node', function (this: INode, config: IConfig) {
         RED.nodes.createNode(this, config);
 
         let context = this.context().global;
+        const initEmitter: EventEmitter | any = context.get('initEmitter');
 
         this.name = config.name;
         this.UUID = config.UUID;
 
         const onInit = async () => {
             let device: Device | any = context.get('deviceInfo');
+            let remoteEvents: EventEmitter | any = context.get('remoteEvents');
             await initializeNode(this, device);
+
+            remoteEvents.on('updated_data', async (msg: string) => {
+
+                const DATA_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:data:${this.UUID}$`;
+
+                if (msg.match(RegExp(DATA_UPDATE_EXPRESSION))) {
+                    await setActualFunctions(this);
+                }
+            });
+
+            remoteEvents.on('updated_status', async (msg: string) => {
+
+                const STATUS_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:87:FE:${this.UUID}`;
+
+                if (msg.match(RegExp(STATUS_UPDATE_EXPRESSION))) {
+                    await setActualPowerStatus(this);
+                }
+            });
         }
 
-        masterEmitter.once('initialized', onInit);
+
+        initEmitter.on('initialized', onInit);
 
         this.on('input', async (msg, send, done) => {
             let command: string = msg.payload.toString() || '';
@@ -39,28 +59,5 @@ export = function (RED: nodeRed.NodeAPI): void {
                 done();
             }
         });
-
-        this.on('close', () => {
-            //masterEmitter.removeListener('initialized', onInit);
-        });
-
-        emitter.on('updated_data', async (msg: string) => {
-
-            const DATA_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:data:${this.UUID}$`;
-
-            if (msg.match(RegExp(DATA_UPDATE_EXPRESSION))) {
-                await setActualFunctions(this);
-            }
-        });
-
-        emitter.on('updated_status', async (msg: string) => {
-
-            const STATUS_UPDATE_EXPRESSION: string = String.raw`LOOK\.?in:Updated!${this.ID}:87:FE:${this.UUID}`;
-
-            if (msg.match(RegExp(STATUS_UPDATE_EXPRESSION))) {
-                await setActualPowerStatus(this);
-            }
-        });
-
     });
 }

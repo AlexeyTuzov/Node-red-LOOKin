@@ -1,7 +1,7 @@
 import * as nodeRed from 'node-red';
-import UDPserver from '../_utilites/UDPserver';
+import {UDPserver} from '../_utilites/UDPserverClass';
 import {Device} from '../_utilites/interfaces';
-import masterEmitter from '../_utilites/NodeRedUtilites/common node/masterEventEmitter';
+import EventEmitter from 'events';
 
 
 export = function (RED: nodeRed.NodeAPI): void {
@@ -12,30 +12,29 @@ export = function (RED: nodeRed.NodeAPI): void {
 
         this.name = config.name;
 
-        const savedInfo: Device | any = context.get('deviceInfo');
-        if (savedInfo) {
-            this.status({fill: 'green', shape: 'dot', text: 'connected'});
-            masterEmitter.emit('initialized');
-            console.log('SAVED:');
-            console.log('listeners count', masterEmitter.listenerCount('initialized'));
-            console.log('listeners:', masterEmitter.listeners('initialized'));
-        } else {
-            UDPserver().then((value: Device) => {
-                this.status({fill: 'green', shape: 'dot', text: 'connected'});
-                context.set('deviceInfo', value);
-                masterEmitter.emit('initialized');
-                console.log('SERVER STARTED:');
-                console.log('listeners count', masterEmitter.listenerCount('initialized'));
-                console.log('listeners:', masterEmitter.listeners('initialized'));
-            }).catch((err) => {
-                this.log(err.stack);
-            });
-        }
+        let initEmitter: EventEmitter = new EventEmitter();
+        context.set('initEmitter', initEmitter);
 
-        this.on('close', (done) => {
+        let savedInfo: Device | null = null;
+        let remoteEvents: EventEmitter | null = null;
+
+        const server = new UDPserver();
+        server.start().then(() => {
+            savedInfo = server.getDeviceData();
+            context.set('deviceInfo', savedInfo);
+            remoteEvents = server.getEmitter();
+            context.set('remoteEvents', remoteEvents);
+            initEmitter.emit('initialized');
+            this.status({fill: 'green', shape: 'dot', text: 'connected'});
+            console.log('listeners count', initEmitter.listenerCount('initialized'));
+        }).catch((err) => {
+            this.log(err.stack);
+        });
+
+        this.on('close', () => {
+            server.halt();
+            initEmitter.removeAllListeners();
             this.status({fill: 'red', shape: 'dot', text: 'disconnected'});
-            console.log('close event fired! fot master node');
-            done();
         });
     });
 };

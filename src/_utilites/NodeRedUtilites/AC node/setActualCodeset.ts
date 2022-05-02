@@ -7,7 +7,6 @@ const setActualCodeset = async (node: ACNode): Promise<void> => {
     await getACCodeset(node.IP, node.UUID)
         .then(value => {
             node.codeset = value || '';
-            console.log('setActualCodeset: node.codeset:', node.codeset);
         })
         .catch((err: any) => {
             logger(node, `Failed to update air conditioner ${node.UUID} code set! ${err.message}`);
