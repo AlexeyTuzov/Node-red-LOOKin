@@ -27,18 +27,6 @@ export interface Functions {
     Name: string;
     Type: string;
 }
-export interface pairingInfo {
-    name: string;
-    data: {
-        id: string;
-    };
-    store: {
-        UUID: string;
-        functions?: Functions[] | undefined;
-        status: string;
-        codeset?: string;
-    };
-}
 export interface DeviceFullInfo {
     Type: string;
     MRDC: string;

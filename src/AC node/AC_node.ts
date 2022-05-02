@@ -29,7 +29,6 @@ export = function (RED: nodeRed.NodeAPI) {
 
                 if (msg.match(RegExp(DATA_UPDATE_EXPRESSION))) {
                     await setActualCodeset(this);
-                    console.log('AC codeset:', this.codeset);
                 }
             });
 
@@ -39,12 +38,8 @@ export = function (RED: nodeRed.NodeAPI) {
 
                 if (msg.match(RegExp(STATUS_UPDATE_EXPRESSION))) {
                     await setActualACStatus(this);
-                    console.log('AC status:', this.ACmode, this.tempShift, this.fanMode, this.shuttersMode);
                 }
             });
-            console.log('AC status:', this.ACmode, this.tempShift, this.fanMode, this.shuttersMode);
-            console.log('AC codeset:', this.codeset);
-            console.log('REMOTE EVENTS:', remoteEvents);
         }
 
         initEmitter.on('initialized', onInit);

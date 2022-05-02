@@ -44,7 +44,6 @@ export = function (RED: nodeRed.NodeAPI): void {
             });
         }
 
-
         initEmitter.on('initialized', onInit);
 
         this.on('input', async (msg, send, done) => {
@@ -54,7 +53,6 @@ export = function (RED: nodeRed.NodeAPI): void {
                 logger(this, `No function for command '${command}' found for ${this.UUID}`);
             }
             if (this.isAvailable && !!func && isFunctionExist(this, func)) {
-                console.log('command to be sent:', command);
                 await sendRequest(this, command);
                 done();
             }

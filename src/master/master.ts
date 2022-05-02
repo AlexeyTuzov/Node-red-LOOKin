@@ -20,13 +20,16 @@ export = function (RED: nodeRed.NodeAPI): void {
 
         const server = new UDPserver();
         server.start().then(() => {
+
             savedInfo = server.getDeviceData();
             context.set('deviceInfo', savedInfo);
+
             remoteEvents = server.getEmitter();
             context.set('remoteEvents', remoteEvents);
+
             initEmitter.emit('initialized');
             this.status({fill: 'green', shape: 'dot', text: 'connected'});
-            console.log('listeners count', initEmitter.listenerCount('initialized'));
+
         }).catch((err) => {
             this.log(err.stack);
         });
